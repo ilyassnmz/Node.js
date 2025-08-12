@@ -12,3 +12,5 @@ connection.connect(function(err) {
 });
 
 module.exports = connection.promise();
+
+// promise, async-await => async
