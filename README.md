@@ -22,7 +22,7 @@ Bu proje ile aşağıdaki konuları öğrenmeye ve uygulamaya çalıştım:
 
 ## ⚙️ Teknolojiler
 
-Projede kullandığım başlıca teknolojiler ve araçlar:
+Projede kullandığım-Kullanacağım başlıca teknolojiler ve araçlar:
 
 - **Node.js**  
 - **Express.js**  
