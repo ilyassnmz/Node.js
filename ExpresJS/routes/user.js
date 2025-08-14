@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-const db = require("../data/db");
-
 const data = {
     title: "Popüler Kurslar",
     categories: ["Web Geliştirme", "Programlama", "Mobil Uygulamalar", "Veri Analizi", "Ofis Uygulamaları"],
@@ -47,36 +45,11 @@ router.use("/blogs/:blogid", function(req, res) {
 });
 
 router.use("/blogs", function(req, res) {
-    db.execute("select * from blog where onay=1")
-        .then(result => {            
-            res.render("users/blogs", {
-                title: "Tüm Kurslar",
-                blogs: result[0],
-                categories: data.categories
-            });
-        })
-        .catch(err => console.log(err));
+    res.render("users/blogs", data);
 });
 
 router.use("/", function(req, res) {
-    db.execute("select * from blog where onay=1 and anasayfa=1")
-        .then(result => {     
-            
-            db.execute("select * from category")
-                .then(sonuc =>{
-
-                    console.log(sonuc[0]); //categories
-
-                    res.render("users/index", {
-                    title: "Popüler Kurslar",
-                    blogs: result[0],
-                    categories: data.categories
-                    });
-                })
-                .catch(err => console.log(err));
-            
-            })
-        .catch(err => console.log(err));
-    });
+    res.render("users/index", data);
+});
 
 module.exports = router;

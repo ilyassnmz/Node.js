@@ -18,16 +18,21 @@
                 </h1>
 
                 <% blogs.forEach(blog => { %>
-                    <%- include("../partials/blog-card", { 
-                        baslik: blog.baslik, 
-                        aciklama: blog.aciklama, 
-                        resim: blog.resim 
-                    }) %>
+
+                    <% if (blog.onay) { %>
+                        <%- include("../partials/blog-card", blog)  %> 
+                    <% } %>
+
                 <% }) %>
 
+
                 <% if (blogs.filter(b => b.onay).length > 3) { %>
+              
                     <%- include("../partials/pagination")  %> 
+                 
                 <% } %>
+               
+
              
             </div>
         </div>
@@ -35,3 +40,6 @@
 
 </body>
 </html>
+
+
+
