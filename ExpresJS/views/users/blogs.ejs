@@ -18,11 +18,7 @@
                 </h1>
 
                 <% blogs.forEach(blog => { %>
-
-                    <% if (blog.onay) { %>
                         <%- include("../partials/blog-card", blog)  %> 
-                    <% } %>
-
                 <% }) %>
 
 
