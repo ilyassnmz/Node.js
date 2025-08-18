@@ -8,7 +8,7 @@
     <div class="container mt-3">
         <div class="row">
             <div class="col-md-12 mt-3">
-                <form action="">
+                <form method="post">
                     <div class="row mb-3">
                         <label for="baslik" class="col-sm-2 col-form-label">Başlık</label>
                         <div class="col-sm-8">
@@ -31,7 +31,10 @@
                         <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
                         <div class="col-sm-8">
                             <select name="kategori" id="kategori" class="form-select">
-                                <option value="" selected>Seçiniz</option>
+                                <option value="-1" selected>Seçiniz</option>
+                                <% categories.forEach(category => { %>
+                                 <option value="<%= category.categoryid %>"><%= category.name %></option>
+                                <% }) %>
                             </select>
                         </div>
                     </div>
