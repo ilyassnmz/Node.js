@@ -39,8 +39,17 @@ router.get("/blogs/:blogid", function(req, res) {
     res.render("admin/blog-edit");
 });
 
-router.get("/blogs", function(req, res) {
-    res.render("admin/blog-list");
+router.get("/blogs",async function(req, res) {
+    try{
+        const [blogs, ] = await db.execute("select blogid, baslik, resim from blog");
+        res.render("admin/blog-list", {
+            title: "blog list",
+            blogs: blogs
+        })
+    }
+    catch(err) {
+        console.log(err);
+    }
 });
 
 module.exports = router;
