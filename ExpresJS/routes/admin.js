@@ -3,6 +3,34 @@ const router = express.Router();
 
 const db = require("../data/db");
 
+router.get("/blog/delete/:blogid", async function(req, res){
+    const blogid = req.params.blogid;
+
+    try{
+        const [blogs, ] = await db.execute("select * from blog where blogid = ?", [blogid]);
+        const blog = blogs[0];
+
+        res.render("admin/blog-delete", {
+            title: "delete blog",
+            blog: blog 
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+});
+
+router.post("/blog/delete/:blogid", async function(req, res){
+    const blogid = req.body.blogid;
+    try{
+        await db.execute("delete from blog where blogid = ?", [blogid]);
+        res.redirect("/admin/blogs");
+    }
+    catch(err) {
+        console.log(err);
+    }
+});
+
 router.get("/blog/create", async function(req, res) {
     try {
         
