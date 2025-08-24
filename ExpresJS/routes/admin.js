@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
 
 const db = require("../data/db");
 const imageUpload = require("../helpers/image-upload");
@@ -138,11 +139,20 @@ router.get("/blogs/:blogid", async function(req, res) {
     }
 });
 
-router.post("/blogs/:blogid", async function(req, res) {
+router.post("/blogs/:blogid",imageUpload.upload.single("resim"), async function(req, res) {
     const blogid = req.body.blogid;
     const baslik = req.body.baslik;
     const aciklama = req.body.aciklama;
-    const resim = req.body.resim;
+    let resim = req.body.resim;
+
+    if(req.file) {
+        resim = req.file.filename;
+
+        fs.unlink("./public/images/" + req.body.resim, err => {
+            console.log(err);
+        });
+    }
+
     const anasayfa = req.body.anasayfa == "on" ? 1 : 0;
     const onay = req.body.onay == "on" ? 1 : 0;
     const kategoriid = req.body.kategori;
