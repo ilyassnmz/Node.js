@@ -2,18 +2,18 @@ const express = require("express");
 const router = express.Router();
 
 const db = require("../data/db");
+const imageUpload = require("../helpers/image-upload");
 
-// ---------------- BLOG DELETE ----------------
 router.get("/blog/delete/:blogid", async function(req, res){
     const blogid = req.params.blogid;
-    
+
     try {
-        const [blogs] = await db.execute("select * from blog where blogid = ?", [blogid]);
+        const [blogs,] = await db.execute("select * from blog where blogid=?", [blogid]);
         const blog = blogs[0];
-        
+
         res.render("admin/blog-delete", {
             title: "delete blog",
-            blog: blog 
+            blog: blog
         });
     }
     catch(err) {
@@ -21,10 +21,10 @@ router.get("/blog/delete/:blogid", async function(req, res){
     }
 });
 
-router.post("/blog/delete/:blogid", async function(req, res){
+router.post("/blog/delete/:blogid", async function(req, res) {
     const blogid = req.body.blogid;
     try {
-        await db.execute("delete from blog where blogid = ?", [blogid]);
+        await db.execute("delete from blog where blogid=?", [blogid]);
         res.redirect("/admin/blogs?action=delete");
     }
     catch(err) {
@@ -32,17 +32,17 @@ router.post("/blog/delete/:blogid", async function(req, res){
     }
 });
 
-// ---------------- CATEGORY DELETE ----------------
+// categories delete
 router.get("/category/delete/:categoryid", async function(req, res){
     const categoryid = req.params.categoryid;
-    
+
     try {
-        const [categories] = await db.execute("select * from category where categoryid = ?", [categoryid]);
+        const [categories,] = await db.execute("select * from category where categoryid=?", [categoryid]);
         const category = categories[0];
-        
+
         res.render("admin/category-delete", {
             title: "delete category",
-            category: category 
+            category: category
         });
     }
     catch(err) {
@@ -50,10 +50,10 @@ router.get("/category/delete/:categoryid", async function(req, res){
     }
 });
 
-router.post("/category/delete/:categoryid", async function(req, res){
+router.post("/category/delete/:categoryid", async function(req, res) {
     const categoryid = req.body.categoryid;
     try {
-        await db.execute("delete from category where categoryid = ?", [categoryid]);
+        await db.execute("delete from category where categoryid=?", [categoryid]);
         res.redirect("/admin/categories?action=delete");
     }
     catch(err) {
@@ -61,81 +61,77 @@ router.post("/category/delete/:categoryid", async function(req, res){
     }
 });
 
-// ---------------- BLOG CREATE ----------------
 router.get("/blog/create", async function(req, res) {
     try {
-        const [categories] = await db.execute("select * from category");
+        const [categories, ] = await db.execute("select * from category");
+
         res.render("admin/blog-create", {
             title: "add blog",
-            categories: categories,
+            categories: categories
         });
-    } 
-    catch (err) {
+    }
+    catch(err) {
         console.log(err);
     }
 });
 
-router.post("/blog/create", async function(req, res) {
+router.post("/blog/create", imageUpload.upload.single("resim"), async function(req, res) {
     const baslik = req.body.baslik;
     const aciklama = req.body.aciklama;
-    const resim = req.body.resim;
+    const resim = req.file.filename;
+    const anasayfa = req.body.anasayfa == "on" ? 1:0;
+    const onay = req.body.onay == "on"? 1:0;
     const kategori = req.body.kategori;
-    const anasayfa = req.body.anasayfa == "on" ? 1 : 0;
-    const onay = req.body.onay == "on" ? 1 : 0;
 
     try {
-        await db.execute(
-            "INSERT INTO blog (baslik, aciklama, resim, anasayfa, onay, categoryid) VALUES (?,?,?,?,?,?)",
-            [baslik, aciklama, resim, anasayfa, onay, kategori]
-        );
-        res.redirect("/admin/blogs?action=create");    
+        console.log(resim);
+        await db.execute("INSERT INTO blog(baslik, aciklama, resim, anasayfa, onay, categoryid) VALUES (?,?,?,?,?,?)", [baslik, aciklama, resim, anasayfa, onay, kategori]);
+        res.redirect("/admin/blogs?action=create");
     }
-    catch (err) {
+    catch(err) {
         console.log(err);
     }
 });
 
-// ---------------- CATEGORY CREATE ----------------
 router.get("/category/create", async function(req, res) {
     try {
         res.render("admin/category-create", {
-            title: "add category",
+            title: "add category"
         });
-    } 
-    catch (err) {
+    }
+    catch(err) {
         console.log(err);
     }
 });
 
 router.post("/category/create", async function(req, res) {
     const name = req.body.name;
-
     try {
-        await db.execute("INSERT INTO category (name) VALUES (?)" , [name]);
-        res.redirect("/admin/categories?action=create");    
+        await db.execute("INSERT INTO category(name) VALUES (?)", [name]);
+        res.redirect("/admin/categories?action=create");
     }
-    catch (err) {
+    catch(err) {
         console.log(err);
     }
 });
 
-// ---------------- BLOG EDIT ----------------
 router.get("/blogs/:blogid", async function(req, res) {
     const blogid = req.params.blogid;
 
     try {
-        const [blogs] = await db.execute("select * from blog where blogid = ?", [blogid]);
-        const [categories] = await db.execute("select * from category");
+        const [blogs, ] = await db.execute("select * from blog where blogid=?", [blogid]);
+        const [categories, ] = await db.execute("select * from category");
         const blog = blogs[0];
-        
-        if (blog) {
+
+        if(blog) {
             return res.render("admin/blog-edit", {
                 title: blog.baslik,
                 blog: blog,
-                categories: categories,
+                categories: categories
             });
         }
-        res.render("admin/blogs");
+
+        res.redirect("admin/blogs");
     }
     catch(err) {
         console.log(err);
@@ -152,10 +148,7 @@ router.post("/blogs/:blogid", async function(req, res) {
     const kategoriid = req.body.kategori;
 
     try {
-        await db.execute(
-            "UPDATE blog SET baslik = ?, aciklama = ?, resim = ?, anasayfa = ?, onay = ?, categoryid = ? WHERE blogid = ?",
-            [baslik, aciklama, resim, anasayfa, onay, kategoriid, blogid]
-        );
+        await db.execute("UPDATE blog SET baslik=?, aciklama=?, resim=?, anasayfa=?, onay=?, categoryid=? WHERE blogid=?", [baslik,aciklama, resim,anasayfa,onay,kategoriid, blogid]);
         res.redirect("/admin/blogs?action=edit&blogid=" + blogid);
     }
     catch(err) {
@@ -163,21 +156,22 @@ router.post("/blogs/:blogid", async function(req, res) {
     }
 });
 
-// ---------------- CATEGORY EDIT ----------------
+// categories edit
 router.get("/categories/:categoryid", async function(req, res) {
     const categoryid = req.params.categoryid;
 
     try {
-        const [categories] = await db.execute("select * from category where categoryid = ?", [categoryid]);
+        const [categories, ] = await db.execute("select * from category where categoryid=?", [categoryid]);
         const category = categories[0];
-        
-        if (category) {
+
+        if(category) {
             return res.render("admin/category-edit", {
                 title: category.name,
                 category: category
             });
         }
-        res.render("admin/categories");
+
+        res.redirect("admin/categories");
     }
     catch(err) {
         console.log(err);
@@ -188,6 +182,7 @@ router.post("/categories/:categoryid", async function(req, res) {
     const categoryid = req.body.categoryid;
     const name = req.body.name;
 
+
     try {
         await db.execute("UPDATE category SET name=? where categoryid=?", [name, categoryid]);
         res.redirect("/admin/categories?action=edit&categoryid=" + categoryid);
@@ -197,12 +192,26 @@ router.post("/categories/:categoryid", async function(req, res) {
     }
 });
 
-// ---------------- CATEGORY LIST ----------------
+router.get("/blogs", async function(req, res) {
+    try {
+        const [blogs,] = await db.execute("select blogid, baslik, resim from blog");
+        res.render("admin/blog-list", {
+            title: "blog list",
+            blogs: blogs,
+            action: req.query.action,
+            blogid: req.query.blogid
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+});
+
 router.get("/categories", async function(req, res) {
     try {
-        const [categories] = await db.execute("select * from category");
+        const [categories,] = await db.execute("select * from category");
         res.render("admin/category-list", {
-            title: "category list",
+            title: "blog list",
             categories: categories,
             action: req.query.action,
             categoryid: req.query.categoryid
