@@ -3,10 +3,10 @@ const router = express.Router();
 
 const db = require("../data/db");
 
-router.use("/blogs/category/:categoryid", async function(req, res){
+router.use("/blogs/category/:categoryid", async function(req, res) {
     const id = req.params.categoryid;
-    try{
-        const [blogs, ] = await db.execute("select * from blog where categoryid=?", [id]);
+    try {
+        const [blogs, ] = await db.execute("select * from blog where categoryid=?", [id]); 
         const [categories, ] = await db.execute("select * from category");
 
         res.render("users/blogs", {
@@ -29,22 +29,20 @@ router.use("/blogs/:blogid", async function(req, res) {
         const blog = blogs[0];
 
         if(blog) {
-            return res.render("users/blog-details",{
-                title: blogs[0].baslik,
-                blog: blogs[0]
+            return res.render("users/blog-details", {
+                title: blog.baslik,
+                blog: blog
             });
-
         }
         res.redirect("/");
     }
-    catch(err){
+    catch(err) {
         console.log(err);
     }
 });
 
 router.use("/blogs", async function(req, res) {
-
-    try{
+    try {
         const [blogs, ] = await db.execute("select * from blog where onay=1")
         const [categories, ] = await db.execute("select * from category");
 
@@ -55,15 +53,13 @@ router.use("/blogs", async function(req, res) {
             selectedCategory: null
         })
     }
-    catch(err){
+    catch(err) {
         console.log(err);
     }
-
 });
 
 router.use("/", async function(req, res) {
-
-    try{
+    try {
         const [blogs, ] = await db.execute("select * from blog where onay=1 and anasayfa=1")
         const [categories, ] = await db.execute("select * from category");
 
@@ -74,9 +70,9 @@ router.use("/", async function(req, res) {
             selectedCategory: null
         })
     }
-    catch(err){
+    catch(err) {
         console.log(err);
     }
 });
-
+ 
 module.exports = router;

@@ -1,4 +1,3 @@
-const mysql = require("mysql2");
 const config = require("../config");
 
 const Sequelize = require("sequelize");
@@ -10,7 +9,7 @@ const sequelize = new Sequelize(config.db.database, config.db.user, config.db.pa
 
 async function connect() {
     try {
-        sequelize.authenticate();
+        await sequelize.authenticate();
         console.log("MySQL Server Bağlantısı Yapıldı");
     }
     catch (err) {
@@ -21,19 +20,3 @@ async function connect() {
 connect();
 
 module.exports = sequelize;
-
-// let connection = mysql.createConnection(config.db);
-
-// connection.connect(function(err){
-//     if(err) {
-//         return console.log(err);
-//     }
-
-//     connection.query("select * from blog", function(err, result){
-//         console.log(result[0].baslik);
-//     })
-
-//     console.log("MySQL Server Bağlantısı Yapıldı")
-// });
-
-// module.exports = connection.promise();

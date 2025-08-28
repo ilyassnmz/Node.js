@@ -12,28 +12,26 @@ const Category = sequelize.define("category", {
         type: DataTypes.STRING,
         allowNull: false
     }
-},{
+}, {
     timestamps: false
 });
 
 async function sync() {
-    await Category.sync({ alter: true });
+    await Category.sync({ force: true });
     console.log("category tablosu eklendi");
 
-    // await Category.create({name: "Web Geliştirme"});
-    // await Category.create({name: "Mobil Geliştirme"});
-    // await Category.create({name: "Programlama"});
+    // await Category.create({name: "Web Geliştirme" });
+    // await Category.create({name: "Mobil Geliştirme" });
+    // await Category.create({name: "Programlama" });
 
-    const count = await Category.count();
+    await Category.bulkCreate([
+        {name: "Web Geliştirme" },
+        {name: "Mobil Geliştirme" },
+        {name: "Programlama" }
+    ])
 
-    if (count == 0) {
-        await Category.bulkCreate([
-            {name: "Web Geliştirme"},
-            {name: "Mobil Geliştirme"},
-            {name: "Programlama"}
-        ]);
-    }
-    console.log("Kategoriler eklendi");
+    
+    console.log("kategoriler eklendi");
 }
 
 sync();
