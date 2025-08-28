@@ -68,6 +68,8 @@ async function sync() {
 
 }
 
+// migrations
+
 sync();
 
 module.exports = Blog;
