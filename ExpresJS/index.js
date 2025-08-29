@@ -15,6 +15,27 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 app.use("/admin", adminRoutes);
 app.use(userRoutes); 
 
+const sequelize = require("./data/db");
+const dummyData = require("./data/dummy-data");
+const Category = require("./models/category");
+const Blog = require("./models/blog");
+
+Category.hasMany(Blog, {
+    foreignKey: {
+        name: 'categoryId',
+        allowNull: false,
+        // defaultValue: 1
+    }
+});
+Blog.belongsTo(Category);
+
+
+(async () =>{
+    await sequelize.sync({ force: true });
+    await dummyData();
+})();
+
+
 app.listen(3000, function() {
     console.log("listening on port 3000");
 });
