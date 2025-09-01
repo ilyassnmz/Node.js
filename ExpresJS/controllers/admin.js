@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const Blog = require("../models/blog");
 const Category = require("../models/category");
 
@@ -197,11 +198,15 @@ exports.get_category_edit = async function(req, res) {
 
     try {
         const category = await Category.findByPk(categoryid);
+        const blogs = await category.getBlogs();
+        const countBlog = await category.countBlogs();
 
         if(category) {
             return res.render("admin/category-edit", {
                 title: category.dataValues.name,
-                category: category.dataValues
+                category: category.dataValues,
+                blogs: blogs,
+                countBlog: countBlog
             });
         }
 
