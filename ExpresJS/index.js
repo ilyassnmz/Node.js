@@ -19,19 +19,9 @@ const sequelize = require("./data/db");
 const dummyData = require("./data/dummy-data");
 const Category = require("./models/category");
 const Blog = require("./models/blog");
-const { on } = require("events");
 
-Category.hasMany(Blog, {
-    foreignKey: {
-        name: 'categoryId',
-        allowNull: true,
-        // defaultValue: 1
-    },
-    onDelete: 'SET NULL',
-    onUpdate: 'SET NULL'
-});
-Blog.belongsTo(Category);
-
+Blog.belongsToMany(Category, { through: "blogCategories" });
+Category.belongsToMany(Blog, { through: "blogCategories" });
 
 (async () =>{
     await sequelize.sync({ force: true });  

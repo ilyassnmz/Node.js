@@ -9,22 +9,22 @@
 
     <div class="container mt-3">
           <div class="row">
-            <% if (action != "undefined" && action=="edit") { %>
-             <div class="alert alert-success">
-                <%= categoryid %> id numaralı kategori güncellendi.
-             </div>
-            <% } %>
-            <% if (action != "undefined" && action=="create") { %>
-             <div class="alert alert-success">
-                Kategori Eklendi.
-             </div>
-            <% } %>
-            <% if (action != "undefined" && action=="delete") { %>
-             <div class="alert alert-danger">
-                Kategori Silindi.
-             </div>
-            <% } %>
             <div class="col-md-12 mt-3">
+                <% if (action != "undefined" && action=="edit") { %>
+                    <div class="alert alert-success">
+                        <%= categoryid %> id numaralı kategori Güncelledi.
+                    </div>
+                <% } %>
+                <% if (action != "undefined" && action=="create") { %>
+                    <div class="alert alert-success">
+                        kategori Eklendi.
+                    </div>
+                <% } %>
+                <% if (action != "undefined" && action=="delete") { %>
+                    <div class="alert alert-success">
+                        kategori Silindi.
+                    </div>
+                <% } %>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>

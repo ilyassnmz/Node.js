@@ -1,5 +1,5 @@
 const config = {
-    db:{
+    db: {
         host: "localhost",
         user: "root",
         password: "1304dxgroup",

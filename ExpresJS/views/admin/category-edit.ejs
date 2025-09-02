@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include("../partials/head") %> 
+    <%- include("../partials/head")  %> 
 </head>
 <body>
-
-    <%- include("../partials/nav") %> 
+    
+    <%- include("../partials/nav")  %> 
 
     <div class="container mt-3">
         <div class="row">
             <div class="col-md-12 mt-3">
-                <form method="post">
-                    <input type="hidden" name="categoryid" value="<%= category.id %>" />
-                    <div class="row mb-3">
-                        <label for="baslik" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="name" name="name" value="<%= category.name %>">
+                <div class="card card-body">
+                    <form method="post">
+                        <input type="hidden" name="categoryid" value="<%= category.id %>">
+                        <div class="row mb-3">
+                            <label for="baslik" class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="name" name="name" value="<%= category.name %> ">
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-8 offset-sm-2">
+                        <div class="row mb-3">
+                            <div class="col-sm-8 offset-sm-2">
                             <button type="submit" class="btn btn-primary">Kaydet</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <p>
-                blog sayısı: <%= countBlog %>
-            </p>
-            <table class="table table-bordered table-striped">
+                    </form>
+                </div>
+                <p>
+                    blog sayısı: <%= countBlog %> 
+                </p>
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th style="width: 50px;">id</th>
@@ -55,7 +56,9 @@
                         <% }) %>
                     </tbody>
                 </table>
+            </div>
         </div>
     </div>
+       
 </body>
 </html>

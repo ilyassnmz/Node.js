@@ -27,7 +27,7 @@ exports.blogs_by_category = async function(req, res) {
     }
 }
 
-exports.blog_details = async function(req, res) {
+exports.blogs_details = async function(req, res) {
     const id = req.params.blogid;
     try {
         const blog = await Blog.findOne({
