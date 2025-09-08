@@ -19,6 +19,14 @@ const sequelize = require("./data/db");
 const dummyData = require("./data/dummy-data");
 const Category = require("./models/category");
 const Blog = require("./models/blog");
+const User = require("./models/user");
+
+Blog.belongsTo(User, {
+    foreignKey: {
+        allowNull: true
+    }
+});
+User.hasMany(Blog);
 
 Blog.belongsToMany(Category, { through: "blogCategories" });
 Category.belongsToMany(Blog, { through: "blogCategories" });
