@@ -104,8 +104,8 @@ async function populate() {
         await categories[0].addBlog(blogs[4]);
         await categories[0].addBlog(blogs[5]);
         await categories[0].addBlog(blogs[6]);
-        await categories[0].addBlog(blogs[7]);
-        await categories[0].addBlog(blogs[8]);
+        await categories[1].addBlog(blogs[7]);
+        await categories[1].addBlog(blogs[8]);
         
         await categories[1].addBlog(blogs[2]);
         await categories[1].addBlog(blogs[3]);
