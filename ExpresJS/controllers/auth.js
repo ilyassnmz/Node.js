@@ -47,7 +47,7 @@ exports.get_login = async function(req, res) {
 
 exports.get_logout = async function(req, res) {
     try {
-        res.clearCookie("isAuth");
+        await req.session.destroy();
         return res.redirect("/account/login");
     }
     catch(err) {
@@ -77,7 +77,7 @@ exports.post_login = async function(req, res) {
         const match = await bcrypt.compare(password, user.password);
 
         if(match) {
-            res.cookie("isAuth", 1);
+            req.session.isAuth = 1;
             return res.redirect("/");
         } 
         

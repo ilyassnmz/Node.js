@@ -3,10 +3,17 @@ const express = require("express");
 const app = express();
 
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+    secret: "i love javasc",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 *60 * 24 }
+}));
 
 const path = require("path");
 const userRoutes = require("./routes/user");
