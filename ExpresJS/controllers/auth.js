@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 exports.get_register = async function (req, res) {
     try{
@@ -16,11 +17,13 @@ exports.post_register = async function (req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     try{
         await User.create({
             fullname: name,
             email: email,
-            password: password
+            password: hashedPassword
         });
         return res.redirect("login");
     }
