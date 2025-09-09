@@ -44,6 +44,17 @@ exports.get_login = async function(req, res) {
     }
 }
 
+
+exports.get_logout = async function(req, res) {
+    try {
+        res.clearCookie("isAuth");
+        return res.redirect("/account/login");
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
 exports.post_login = async function(req, res) {
     const email = req.body.email;
     const password = req.body.password;
@@ -59,19 +70,20 @@ exports.post_login = async function(req, res) {
         if(!user) {
             return res.render("auth/login", {
                 title: "login",
-                message: "Email hatalı"
+                message: "email hatalı"
             });
         }
 
         const match = await bcrypt.compare(password, user.password);
 
         if(match) {
+            res.cookie("isAuth", 1);
             return res.redirect("/");
         } 
         
         return res.render("auth/login", {
             title: "login",
-            message: "Parola hatalı"
+            message: "parola hatalı"
         });     
     }
     catch(err) {

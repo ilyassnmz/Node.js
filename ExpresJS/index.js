@@ -2,8 +2,11 @@ const express = require("express");
 
 const app = express();
 
+const cookieParser = require("cookie-parser");
+
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 const path = require("path");
 const userRoutes = require("./routes/user");

@@ -2,7 +2,6 @@ const Blog = require("../models/blog");
 const Category = require("../models/category");
 
 const { Op } = require("sequelize");
-const { link } = require("../routes/user");
 
 
 exports.blogs_details = async function(req, res) {
@@ -35,9 +34,9 @@ exports.blog_list = async function(req, res) {
 
     try {
         const { rows, count } = await Blog.findAndCountAll({ 
-            where: { onay: { [Op.eq]: true} },
+            where: { onay: {[Op.eq]: true } },
             raw: true,
-            include: slug ? {model: Category, where: { url: slug }} : null,
+            include: slug ? { model: Category, where: { url: slug } } : null,
             limit: size,
             offset: page * size 
         });
@@ -60,6 +59,7 @@ exports.blog_list = async function(req, res) {
 }
 
 exports.index = async function(req, res) {
+    console.log(req.cookies);
     try {
         const blogs = await Blog.findAll({
             where: {
@@ -76,7 +76,8 @@ exports.index = async function(req, res) {
             title: "Popüler Kurslar",
             blogs: blogs,
             categories: categories,
-            selectedCategory: null
+            selectedCategory: null,
+            isAuth: req.cookies.isAuth
         })
     }
     catch(err) {
