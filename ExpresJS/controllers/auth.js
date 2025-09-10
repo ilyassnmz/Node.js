@@ -83,7 +83,8 @@ exports.post_login = async function(req, res) {
             req.session.fullname = user.fullname;
             // session in db
             // token-based auth - api
-            return res.redirect("/");
+            const url = req.query.returnUrl || "/";
+            return res.redirect(url);
         } 
         
         return res.render("auth/login", {
