@@ -74,10 +74,15 @@ exports.post_login = async function(req, res) {
             });
         }
 
+        // parola kontrolü
         const match = await bcrypt.compare(password, user.password);
 
         if(match) {
-            req.session.isAuth = 1;
+            // session
+            req.session.isAuth = true;
+            req.session.fullname = user.fullname;
+            // session in db
+            // token-based auth - api
             return res.redirect("/");
         } 
         

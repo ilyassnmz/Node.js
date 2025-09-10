@@ -201,7 +201,7 @@ exports.post_blog_edit = async function(req, res) {
             blog.anasayfa = anasayfa;
             blog.onay = onay;
             blog.url = url;
-
+            
             if(kategoriIds == undefined) {
                 await blog.removeCategories(blog.categories);
             } else {

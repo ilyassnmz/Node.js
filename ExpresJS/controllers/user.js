@@ -76,8 +76,7 @@ exports.index = async function(req, res) {
             title: "Popüler Kurslar",
             blogs: blogs,
             categories: categories,
-            selectedCategory: null,
-            isAuth: req.session.isAuth
+            selectedCategory: null
         })
     }
     catch(err) {

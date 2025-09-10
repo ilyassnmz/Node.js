@@ -32,7 +32,6 @@ const Blog = sequelize.define("blog", {
     }
 }, {
     timestamps: true
-}
-);
+});
 
 module.exports = Blog;

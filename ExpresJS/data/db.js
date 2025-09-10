@@ -7,16 +7,17 @@ const sequelize = new Sequelize(config.db.database, config.db.user, config.db.pa
     host: config.db.host,
     define: {
         timestamps: false
-    }
+    },
+    storage: "./session.mysql"
 });
 
 async function connect() {
     try {
         await sequelize.authenticate();
-        console.log("MySQL Server Bağlantısı Yapıldı");
+        console.log("MySQL server bağlantısı yapıldı");
     }
-    catch (err) {
-        console.log("MySQL Bağlantı Hatası: ", err);
+    catch(err) {
+        console.log("bağlantı hatası ", err);
     }
 }
 
