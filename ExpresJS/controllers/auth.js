@@ -20,12 +20,14 @@ exports.post_register = async function(req, res) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-        await User.create({
-            fullname: name,
-            email: email,
-            password: hashedPassword
-        });
+        const user  = await User.findOne({ where: { email: email }});
+        if(user) {
+            req.session.message = { text: "Girdiğiniz email adresiyle daha önce kayıt olunmuş.", class: "warning"};
+            return res.redirect("login");
+        }
+        await User.create({ fullname: name, email: email, password: hashedPassword });
 
+        req.session.message = { text: "Hesabınıza giriş yapabilirsiniz", class: "success"};
         return res.redirect("login");
     }
     catch(err) {
@@ -34,9 +36,13 @@ exports.post_register = async function(req, res) {
 }
 
 exports.get_login = async function(req, res) {
+    const message = req.session.message;
+    delete req.session.message;
     try {
         return res.render("auth/login", {
-            title: "login"
+            title: "login",
+            message: message,
+            csrfToken: req.csrfToken()
         });
     }
     catch(err) {
@@ -70,7 +76,7 @@ exports.post_login = async function(req, res) {
         if(!user) {
             return res.render("auth/login", {
                 title: "login",
-                message: "email hatalı"
+                message: { text: "Email hatalı", class: "danger"}
             });
         }
 
@@ -89,7 +95,7 @@ exports.post_login = async function(req, res) {
         
         return res.render("auth/login", {
             title: "login",
-            message: "parola hatalı"
+            message: { text: "Parola hatalı", class: "danger"}
         });     
     }
     catch(err) {
