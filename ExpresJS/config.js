@@ -4,6 +4,11 @@ const config = {
         user: "root",
         password: "1304dxgroup",
         database: "blogdb"
+    },
+    email: {
+        username: "tejodo9137@obirah.com",
+        password: "135790",
+        from: "lunap.ilyas@gmail.com",
     }
 }
 
