@@ -60,6 +60,7 @@ exports.get_login = async function(req, res) {
     }
 }
 
+
 exports.get_logout = async function(req, res) {
     try {
         await req.session.destroy();
@@ -128,11 +129,12 @@ exports.get_reset = async function(req, res) {
 
 exports.post_reset = async function(req, res) {
     const email = req.body.email;
+
     try {
         var token = ctypto.randomBytes(32).toString("hex");
         const user = await User.findOne({ where: { email: email }});
-
-        if(!user){
+        
+        if(!user) {
             req.session.message = { text: "Email bulunamadı", class: "danger"};
             return res.redirect("reset-password");
         }
@@ -146,14 +148,14 @@ exports.post_reset = async function(req, res) {
             to: email,
             subject: "Reset Password",
             html: `
-                <p>Parolarınız güncellemek için aşağıdaki linke tıklayınız </p>
+                <p>Parolanızı güncellemek için aşağıdaki linke tıklayınız.</p>
                 <p>
                     <a href="http://127.0.0.1:3000/account/reset-password/${token}">Parola Sıfırla<a/>
                 </p>
             `
         });
 
-        req.session.message = { text: "Parolanızı sıfırlamak için eposta adresinizi kontrol ediniz", class: "success"};
+        req.session.message = { text: "parolanızı sıfırlamak için eposta adresinizi kontrol ediniz.", class: "success"};
         res.redirect("login");
     }
     catch(err) {

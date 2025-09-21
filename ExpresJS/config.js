@@ -6,10 +6,10 @@ const config = {
         database: "blogdb"
     },
     email: {
-        username: "tejodo9137@obirah.com",
-        password: "135790",
-        from: "lunap.ilyas@gmail.com",
+        username: "ilyas.snmzz@outlook.com",
+        password: "daoyqrykgoacynmz",
+        from: "ilyas.snmzz@outlook.com"
     }
-}
+};
 
 module.exports = config;
