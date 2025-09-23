@@ -6,9 +6,9 @@ const config = {
         database: "blogdb"
     },
     email: {
-        username: "< email >",
-        password: "< password >",
-        from: "< email >"
+        username: "lunap.ilyas@gmail.com",
+        password: "lxvfldfoynibjiaw",
+        from: "lunap.ilyas@gmail.com"
     }
 };
 

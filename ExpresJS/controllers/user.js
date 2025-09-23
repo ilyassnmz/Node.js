@@ -41,7 +41,7 @@ exports.blog_list = async function(req, res) {
             offset: page * size 
         });
 
-        const categories = await Category.findAll({ raw: true }); 
+        const categories = await Category.findAll({ raw: true });
 
         res.render("users/blogs", {
             title: "Tüm Kurslar",

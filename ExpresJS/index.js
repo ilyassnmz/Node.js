@@ -71,3 +71,24 @@ Category.belongsToMany(Blog, { through: "blogCategories"});
 app.listen(3000, function() {
     console.log("listening on port 3000");
 });
+
+
+// TEST 
+const transporter = require("./helpers/send-mail"); 
+
+async function testMail() {
+    try {
+        let info = await transporter.sendMail({
+            from: `"Blog Uygulaması" <${require("./config").email.from}>`,
+            to: "lunap.ilyas@gmail.com", 
+            subject: "Test Maili ✔",
+            text: "Bu mail Google App Password ile gönderildi.",
+        });
+
+        console.log("Mail başarıyla gönderildi:", info.messageId);
+    } catch (err) {
+        console.error("Mail gönderilemedi:", err);
+    }
+}
+
+testMail();
