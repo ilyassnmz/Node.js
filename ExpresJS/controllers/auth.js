@@ -2,7 +2,8 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const emailService = require("../helpers/send-mail");
 const config = require("../config");
-const ctypto = require("crypto");
+const crypto = require("crypto");
+const { Op } = require("sequelize");
 
 exports.get_register = async function(req, res) {
     try {
@@ -33,8 +34,8 @@ exports.post_register = async function(req, res) {
         emailService.sendMail({
             from: config.email.from,
             to: newUser.email,
-            subject: "Hesabınızı oluşturuldu.",
-            text: "Hesabınızı başarılı şekilde oluşturuldu."
+            subject: "Blogapp",
+            text: "Hesabınız başarılı şekilde oluşturuldu."
         });
 
         req.session.message = { text: "Hesabınıza giriş yapabilirsiniz", class: "success"};
@@ -60,7 +61,6 @@ exports.get_login = async function(req, res) {
     }
 }
 
-
 exports.get_logout = async function(req, res) {
     try {
         await req.session.destroy();
@@ -76,7 +76,6 @@ exports.post_login = async function(req, res) {
     const password = req.body.password;
 
     try {
-
         const user = await User.findOne({
             where: {
                 email: email
@@ -90,15 +89,11 @@ exports.post_login = async function(req, res) {
             });
         }
 
-        // parola kontrolü
         const match = await bcrypt.compare(password, user.password);
 
         if(match) {
-            // session
             req.session.isAuth = true;
             req.session.fullname = user.fullname;
-            // session in db
-            // token-based auth - api
             const url = req.query.returnUrl || "/";
             return res.redirect(url);
         } 
@@ -131,32 +126,90 @@ exports.post_reset = async function(req, res) {
     const email = req.body.email;
 
     try {
-        var token = ctypto.randomBytes(32).toString("hex");
-        const user = await User.findOne({ where: { email: email }});
-        
-        if(!user) {
-            req.session.message = { text: "Email bulunamadı", class: "danger"};
+        const token = crypto.randomBytes(32).toString("hex");
+        const user = await User.findOne({ where: { email: email } });
+
+        if (!user) {
+            req.session.message = { text: "Email bulunamadı", class: "danger" };
             return res.redirect("reset-password");
         }
 
         user.resetToken = token;
-        user.resetTokenExpiration = Date.now() + (1000 * 60 * 60);
+        user.resetTokenExpiration = Date.now() + (1000 * 60 * 60); 
         await user.save();
 
-        emailService.sendMail({
-            from: config.email.from,
+        let info = await emailService.sendMail({
+            from: `"Blog Uygulaması" <${config.email.from}>`,
             to: email,
-            subject: "Reset Password",
+            subject: "Parola Sıfırlama",
             html: `
-                <p>Parolanızı güncellemek için aşağıdaki linke tıklayınız.</p>
+                <p>Parolanızı güncellemek için aşağıdaki linke tıklayın:</p>
                 <p>
-                    <a href="http://127.0.0.1:3000/account/reset-password/${token}">Parola Sıfırla<a/>
+                    <a href="http://127.0.0.1:3000/account/reset-password/${token}">Parola Sıfırla</a>
                 </p>
             `
         });
-
-        req.session.message = { text: "parolanızı sıfırlamak için eposta adresinizi kontrol ediniz.", class: "success"};
+        req.session.message = { 
+            text: "Parolanızı sıfırlamak için e-posta adresinizi kontrol ediniz.", 
+            class: "success" 
+        };
         res.redirect("login");
+
+    } catch (err) {
+        console.error("Mail gönderilemedi:", err);
+        req.session.message = { text: "Mail gönderilemedi.", class: "danger" };
+        res.redirect("reset-password");
+    }
+};
+
+exports.get_newpassword = async function(req, res) {
+    const token = req.params.token;
+
+    try {
+        const user = await User.findOne({
+            where: {
+                resetToken: token,
+                resetTokenExpiration: {
+                    [Op.gt]: Date.now()
+                }
+            }
+        });
+
+        return res.render("auth/new-password", {
+            title: "new password",
+            token: token,
+            userId: user.id
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+exports.post_newpassword = async function(req, res) {
+    const token = req.body.token;
+    const userId = req.body.userId;
+    const newPassword = req.body.password;
+
+    try {
+        const user = await User.findOne({
+            where: {
+                resetToken: token,
+                resetTokenExpiration: {
+                    [Op.gt]: Date.now()
+                },
+                id: userId
+            }
+        });
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.resetToken = null;
+        user.resetTokenExpiration = null;
+        
+        await user.save();
+
+        req.session.message = {text: "parolanız güncellendi", class:"success"};
+        return res.redirect("login");
     }
     catch(err) {
         console.log(err);
