@@ -178,7 +178,8 @@ exports.get_newpassword = async function(req, res) {
         return res.render("auth/new-password", {
             title: "new password",
             token: token,
-            userId: user.id
+            userId: user.id,
+            csrfToken: req.csrfToken()
         });
     }
     catch(err) {
