@@ -3,11 +3,35 @@ const Blog = require("../models/blog");
 const slugField = require("../helpers/slugfield");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const Role = require("../models/role");
 
 async function populate() {
     const count = await Category.count();
 
     if(count == 0) { 
+
+        const users = await User.bulkCreate([
+            {fullname: "ilyas sönmez", email: "info@ilyas.com", password: await bcrypt.hash("135790", 10)},
+            {fullname: "çınar bilgi", email: "info@çınarbilgi.com", password: await bcrypt.hash("135790", 10)},
+            {fullname: "ali bilgi", email: "info@alibilgi.com", password: await bcrypt.hash("135790", 10)},
+            {fullname: "hayri bilgi", email: "info@hayribilgi.com", password: await bcrypt.hash("135790", 10)},
+            {fullname: "yiğit bilgi", email: "info@yigitbilgi.com", password: await bcrypt.hash("135790", 10)},
+        ]);
+
+        const roles = await Role.bulkCreate([
+            {rolename: "admin"},
+            {rolename: "moderator"},
+            {rolename: "guest"},
+        ]);
+
+        await users [0].addRole(roles[0]);  // admin => ilyas
+
+        await users [0].addRole(roles[1]);  // moderator => ilyas
+        await users [1].addRole(roles[1]);  // moderator => çınar
+        await users [2].addRole(roles[1]);  // moderator => ali
+
+        await users [3].addRole(roles[2]);  // guest => hayri
+        await users [4].addRole(roles[2]);  // guest => yiğit
 
         const categories = await Category.bulkCreate([
             { name: "Web Geliştirme",url: slugField("Web Geliştirme"), },
@@ -102,11 +126,6 @@ async function populate() {
                 anasayfa: true,
                 onay: true
             }
-        ]);
-
-        const users = await User.bulkCreate([
-            {fullname: "ilyas", email: "info@ilyas.com", password: await bcrypt.hash("135790", 10)},
-            {fullname: "ahmet", email: "info@ahmet.com", password: await bcrypt.hash("135790", 10)},
         ]);
 
         await categories[0].addBlog(blogs[0]);
