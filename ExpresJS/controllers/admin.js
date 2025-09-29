@@ -1,5 +1,7 @@
 const Blog = require("../models/blog");
-const Category = require("../models/category");
+const Category = require("../models/category"); 
+const Role = require("../models/role");
+const User = require("../models/user");
 const { Op } = require("sequelize");
 const sequelize = require("../data/db");
 const slugField = require("../helpers/slugfield");
@@ -305,6 +307,30 @@ exports.get_categories = async function(req, res) {
             categories: categories,
             action: req.query.action,
             categoryid: req.query.categoryid
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+exports.get_roles = async function(req, res) {
+    try {
+        const roles = await Role.findAll({
+            attributes: {
+                include: ['role.id','role.rolename',[sequelize.fn('COUNT', sequelize.col('users.id')), 'user_count']]
+            },
+            include: [
+                {model: User, attributes:['id']}
+            ],
+            group: ['role.id'],
+            raw: true,
+            includeIgnoreAttributes: false
+        });
+
+        res.render("admin/role-list", {
+            title: "role list",
+            roles: roles
         });
     }
     catch(err) {

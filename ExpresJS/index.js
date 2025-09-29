@@ -68,8 +68,8 @@ Role.belongsToMany(User, {through: "userRoles"});
 User.belongsToMany(Role, {through: "userRoles"});
 
 (async () => {
-    await sequelize.sync({ force: true });
-    await dummyData();
+    // await sequelize.sync({ force: true });
+    // await dummyData();
 })();
 
 app.listen(3000, function() {
