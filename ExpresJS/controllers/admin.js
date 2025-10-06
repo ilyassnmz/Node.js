@@ -337,3 +337,50 @@ exports.get_roles = async function(req, res) {
         console.log(err);
     }
 }
+
+exports.get_role_edit = async function(req, res) {
+    const roleid = req.params.roleid;
+    try {
+        const role = await Role.findByPk(roleid);
+        const users = await role.getUsers();
+        if(role) {
+            return res.render("admin/role-edit", {
+                title: role.rolename,
+                role: role,
+                users: users
+            })
+        }
+        res.redirect("admin/roles");
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+exports.post_role_edit = async function(req, res) {
+    const roleid = req.body.roleid;
+    const rolename = req.body.rolename;
+    try {
+        await Role.update({ rolename: rolename }, {
+            where: {
+              id: roleid
+            }
+        });
+        return res.redirect("/admin/roles");
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+exports.roles_remove = async function(req, res) {
+    const roleid = req.body.roleid;
+    const userid = req.body.userid;
+    try {
+        await sequelize.query(`delete from userRoles where roleId=${roleid} and userId=${userid}`);
+        return res.redirect("/admin/roles/" + roleid);
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
