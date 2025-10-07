@@ -403,3 +403,71 @@ exports.get_user = async function(req, res) {
         console.log(err);
     }
 }
+
+exports.get_user_edit = async function(req, res) {
+    const userid = req.params.userid;
+    try {
+        const user = await User.findOne({
+            where: { id: userid },
+            include: {
+                model: Role,
+                attributes: ["id"]
+            }
+        });
+
+        const roles = await Role.findAll();
+        
+        res.render("admin/user-edit", {
+            title: "user edit",
+            user: user,
+            roles: roles
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+exports.post_user_edit = async function(req, res) {
+    const userid = req.body.userid;
+    const fullname = req.body.fullname;
+    const email = req.body.email;
+    const roleIds = req.body.roles;
+
+    console.log(req.body);
+    try {
+        const user = await User.findOne({
+            where: { id: userid },
+            include: {
+                model: Role,
+                attributes: ["id"]
+            }
+        });
+
+        if(user) {
+            user.fullname = fullname;
+            user.email = email;
+
+            if(roleIds == undefined) {
+                await user.removeRoles(user.roles);
+            }
+            else {
+                await user.removeRoles(user.roles);
+                const selectedRoles = await Role.findAll({
+                    where: {
+                        id: {
+                            [Op.in]: roleIds
+                        }
+                    }
+                });
+                await user.addRoles(selectedRoles);
+            }
+            await user.save();
+            return res.redirect("/admin/users");
+        }        
+        return res.redirect("/admin/users");
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
