@@ -42,4 +42,8 @@ router.get("/roles/:roleid",isAuth, csrf, adminController.get_role_edit);
 router.post("/roles/remove",isAuth, adminController.roles_remove);
 router.post("/roles/:roleid",isAuth, adminController.post_role_edit);
 
+router.get("/users",isAuth, adminController.get_user);
+// router.get("/users/:userid",isAuth, csrf, adminController.get_user_edit);
+// router.post("/users/:userid",isAuth, adminController.post_user_edit);
+
 module.exports = router;

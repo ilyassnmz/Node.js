@@ -384,3 +384,22 @@ exports.roles_remove = async function(req, res) {
         console.log(err);
     }
 }
+
+exports.get_user = async function(req, res) {
+    try {
+        const users = await User.findAll({
+            attributes: ["id","fullname","email"],
+            include: {
+                model: Role,
+                attributes: ["rolename"]
+            }
+        });
+        res.render("admin/user-list", {
+            title: "user list",
+            users: users
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
