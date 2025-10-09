@@ -26,7 +26,6 @@ async function populate() {
 
         await users [0].addRole(roles[0]);  // admin => ilyas
 
-        await users [0].addRole(roles[1]);  // moderator => ilyas
         await users [1].addRole(roles[1]);  // moderator => çınar
         await users [2].addRole(roles[1]);  // moderator => ali
 
@@ -47,7 +46,8 @@ async function populate() {
                 aciklama: "Web geliştirme komple bir web sitesinin hem web tasarım (html,css,javascript), hem de web programlama (asp.net mvc) konularının kullanılarak geliştirilmesidir. Sadece html css kullanarak statik bir site tasarlayabiliriz ancak işin içine bir web programlama dilini de katarsak dinamik bir web uygulaması geliştirmiş oluruz.",
                 resim: "1.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 2
             },
             {
                 baslik: "Python ile Sıfırdan İleri Seviye Python Programlama",
@@ -56,7 +56,8 @@ async function populate() {
                 aciklama: "Python, son zamanların en popüler programlama dili haline geldi. Python' ın bu kadar popüler olmasındaki sebep şüphesiz öğrenmesi kolay bir yazılım dili olmasıdır.sadikturan adreslerinde paylaşmış olduğum python dersleri serisini takip ederek ister video ister yazılı kaynaklar yardımıyla kısa zamanda python programlama alanında uzmanlık kazanın ve hayal ettiğiniz projeyi gerçekleştirin.",
                 resim: "2.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 2
             },
             {
                 baslik: "Sıfırdan İleri Seviye Modern Javascript Dersleri ES7+",
@@ -65,7 +66,8 @@ async function populate() {
                 aciklama: "Neden Javascript? Javascript son zamanlarda en popüler diller arasında yerini aldı hatta Javascript listenin en başında diyebiliriz. Peki son zamanlarda bu kadar popüler hale gelen Javascript nedir? Çoğu web geliştirici için Javascript sadece tarayıcıda yani client tarafında çalışan ve html içeriklerini hareketli hale getiren bir script dili olarak biliniyor.  Web sitemize eklediğimiz bir resim galerisi, bir butona tıkladığımızda bir pop-up kutusunun açılması gibi html içeriklerini hareketli hale getiren ve yıllardır kullandığımız programlama dili tabi ki Javascript. Bu yönüyle Javascript 'i yıllardır zaten kullanmaktayız. Ancak son zamanlarda Javascript' i bu kadar popüler yapan neden nedir?",
                 resim: "3.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 2
             },
             {
                 baslik: "Node.js ile Sıfırdan İleri Seviye Web Geliştirme",
@@ -74,7 +76,8 @@ async function populate() {
                 aciklama: "En popüler programlama dili olan Javascript programlama dilini artık Node.js sayesinde server tabanlı bir dil olarak kullanabilirsin.Kurs sonunda sadece Javascript programlama dilini kullanarak Fullstack bir web geliştirici olmak istiyorsan hemen kursa katılmalısın! Üstelik 30 gün iade garantisiyle! Kursumuz piyasadaki en popüler ve en güncel Node.js kursudur.",
                 resim: "4.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 3
             }
             ,
             {
@@ -84,7 +87,8 @@ async function populate() {
                 aciklama: "En popüler programlama dili olan Javascript programlama dilini artık Node.js sayesinde server tabanlı bir dil olarak kullanabilirsin.Kurs sonunda sadece Javascript programlama dilini kullanarak Fullstack bir web geliştirici olmak istiyorsan hemen kursa katılmalısın! Üstelik 30 gün iade garantisiyle! Kursumuz piyasadaki en popüler ve en güncel Node.js kursudur.",
                 resim: "4.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 3
             }
             ,
             {
@@ -94,7 +98,8 @@ async function populate() {
                 aciklama: "En popüler programlama dili olan Javascript programlama dilini artık Node.js sayesinde server tabanlı bir dil olarak kullanabilirsin.Kurs sonunda sadece Javascript programlama dilini kullanarak Fullstack bir web geliştirici olmak istiyorsan hemen kursa katılmalısın! Üstelik 30 gün iade garantisiyle! Kursumuz piyasadaki en popüler ve en güncel Node.js kursudur.",
                 resim: "4.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 3
             }
             ,
             {
@@ -104,7 +109,8 @@ async function populate() {
                 aciklama: "En popüler programlama dili olan Javascript programlama dilini artık Node.js sayesinde server tabanlı bir dil olarak kullanabilirsin.Kurs sonunda sadece Javascript programlama dilini kullanarak Fullstack bir web geliştirici olmak istiyorsan hemen kursa katılmalısın! Üstelik 30 gün iade garantisiyle! Kursumuz piyasadaki en popüler ve en güncel Node.js kursudur.",
                 resim: "4.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 3
             }
             ,
             {
@@ -114,7 +120,8 @@ async function populate() {
                 aciklama: "En popüler programlama dili olan Javascript programlama dilini artık Node.js sayesinde server tabanlı bir dil olarak kullanabilirsin.Kurs sonunda sadece Javascript programlama dilini kullanarak Fullstack bir web geliştirici olmak istiyorsan hemen kursa katılmalısın! Üstelik 30 gün iade garantisiyle! Kursumuz piyasadaki en popüler ve en güncel Node.js kursudur.",
                 resim: "4.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 3
             }
             ,
             {
@@ -124,7 +131,8 @@ async function populate() {
                 aciklama: "En popüler programlama dili olan Javascript programlama dilini artık Node.js sayesinde server tabanlı bir dil olarak kullanabilirsin.Kurs sonunda sadece Javascript programlama dilini kullanarak Fullstack bir web geliştirici olmak istiyorsan hemen kursa katılmalısın! Üstelik 30 gün iade garantisiyle! Kursumuz piyasadaki en popüler ve en güncel Node.js kursudur.",
                 resim: "4.jpeg",
                 anasayfa: true,
-                onay: true
+                onay: true,
+                userId: 3
             }
         ]);
 

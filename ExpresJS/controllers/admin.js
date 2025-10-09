@@ -10,9 +10,10 @@ const fs = require("fs");
 
 exports.get_blog_delete = async function(req, res){
     const blogid = req.params.blogid;
+    const userid = req.session.userid;
 
     try {
-        const blog = await Blog.findByPk(blogid);
+        const blog = await Blog.findOne({ id:blogid, userId: userid });
 
         if(blog) {
             return res.render("admin/blog-delete", {
@@ -94,6 +95,7 @@ exports.post_blog_create = async function(req, res) {
     const resim = req.file.filename;
     const anasayfa = req.body.anasayfa == "on" ? 1:0;
     const onay = req.body.onay == "on"? 1:0;
+    const userid = req.session.userid;
 
     try {
         await Blog.create({
@@ -103,7 +105,8 @@ exports.post_blog_create = async function(req, res) {
             aciklama: aciklama,
             resim: resim,
             anasayfa: anasayfa,
-            onay: onay
+            onay: onay,
+            userId: userid
         });
         res.redirect("/admin/blogs?action=create");
     }
@@ -136,11 +139,13 @@ exports.post_category_create = async function(req, res) {
 
 exports.get_blog_edit = async function(req, res) {
     const blogid = req.params.blogid;
+    const userid = req.session.userid;
 
     try {
         const blog = await Blog.findOne({
             where: {
-                id: blogid
+                id: blogid,
+                userId: userid
             },
             include: {
                 model: Category,
@@ -171,6 +176,7 @@ exports.post_blog_edit = async function(req, res) {
     const aciklama = req.body.aciklama;
     const kategoriIds = req.body.categories;
     const url = req.body.url;
+    const userid = req.session.userid;
 
     let resim = req.body.resim;
 
@@ -188,7 +194,8 @@ exports.post_blog_edit = async function(req, res) {
     try {
         const blog = await Blog.findOne({
             where: {
-                id: blogid
+                id: blogid,
+                userId: userid
             },
             include: {
                 model: Category,
@@ -278,13 +285,18 @@ exports.post_category_edit = async function(req, res) {
 }
 
 exports.get_blogs = async function(req, res) {
+    const userid = req.session.userid;
+    const isModerator = req.session.roles.includes("moderator");
+    const isAdmin = req.session.roles.includes("admin");
+
     try {
         const blogs = await Blog.findAll({ 
             attributes: ["id","baslik","altbaslik","resim"],
             include: {
                 model: Category,
                 attributes: ["name"]
-            } 
+            },
+            where: isModerator && !isAdmin ? { userId: userid } : null
         });
         res.render("admin/blog-list", {
             title: "blog list",

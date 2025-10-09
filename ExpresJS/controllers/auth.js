@@ -4,6 +4,7 @@ const emailService = require("../helpers/send-mail");
 const config = require("../config");
 const crypto = require("crypto");
 const { Op } = require("sequelize");
+const { raw } = require("express");
 
 exports.get_register = async function(req, res) {
     try {
@@ -92,8 +93,16 @@ exports.post_login = async function(req, res) {
         const match = await bcrypt.compare(password, user.password);
 
         if(match) {
+            const userRoles = await user.getRoles({
+                attributes: ["rolename"],
+                raw: true
+            });
+
+            req.session.roles = userRoles.map((role) => role["rolename"]);
             req.session.isAuth = true;
             req.session.fullname = user.fullname;
+            req.session.userid = user.id;
+
             const url = req.query.returnUrl || "/";
             return res.redirect(url);
         } 
