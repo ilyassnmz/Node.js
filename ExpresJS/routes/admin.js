@@ -2,48 +2,48 @@ const express = require("express");
 const router = express.Router();
 
 const imageUpload = require("../helpers/image-upload");
-const isAuth = require("../middlewares/auth");
 const csrf = require("../middlewares/csrf");
 
 const adminController = require("../controllers/admin");
+const isAdmin = require("../middlewares/is-admin");
 
-router.get("/blog/delete/:blogid",isAuth,csrf,adminController.get_blog_delete);
+router.get("/blog/delete/:blogid",isAdmin,csrf,adminController.get_blog_delete);
 
-router.post("/blog/delete/:blogid",isAuth, adminController.post_blog_delete);
+router.post("/blog/delete/:blogid",isAdmin, adminController.post_blog_delete);
 
-router.get("/category/delete/:categoryid",isAuth,csrf, adminController.get_category_delete);
+router.get("/category/delete/:categoryid",isAdmin,csrf, adminController.get_category_delete);
 
-router.post("/category/delete/:categoryid",isAuth, adminController.post_category_delete);
+router.post("/category/delete/:categoryid",isAdmin, adminController.post_category_delete);
 
-router.get("/blog/create",isAuth,csrf, adminController.get_blog_create);
+router.get("/blog/create",isAdmin,csrf, adminController.get_blog_create);
 
-router.post("/categories/remove",isAuth, adminController.get_category_remove);
+router.post("/categories/remove",isAdmin, adminController.get_category_remove);
 
-router.post("/blog/create",isAuth, imageUpload.upload.single("resim"), adminController.post_blog_create);
+router.post("/blog/create",isAdmin, imageUpload.upload.single("resim"), adminController.post_blog_create);
 
-router.get("/category/create",isAuth,csrf, adminController.get_category_create);
+router.get("/category/create",isAdmin,csrf, adminController.get_category_create);
 
-router.post("/category/create",isAuth, adminController.post_category_create);
+router.post("/category/create",isAdmin, adminController.post_category_create);
 
-router.get("/blogs/:blogid",isAuth,csrf, adminController.get_blog_edit);
+router.get("/blogs/:blogid",isAdmin,csrf, adminController.get_blog_edit);
 
-router.post("/blogs/:blogid",isAuth,csrf, imageUpload.upload.single("resim"), adminController.post_blog_edit);
+router.post("/blogs/:blogid",isAdmin,csrf, imageUpload.upload.single("resim"), adminController.post_blog_edit);
 
-router.get("/categories/:categoryid",isAuth,csrf, adminController.get_category_edit);
+router.get("/categories/:categoryid",isAdmin,csrf, adminController.get_category_edit);
 
-router.post("/categories/:categoryid",isAuth, adminController.post_category_edit);
+router.post("/categories/:categoryid",isAdmin, adminController.post_category_edit);
 
-router.get("/blogs",isAuth,adminController.get_blogs);
+router.get("/blogs",isAdmin,adminController.get_blogs);
 
-router.get("/categories",isAuth, adminController.get_categories);
+router.get("/categories",isAdmin, adminController.get_categories);
 
-router.get("/roles",isAuth,adminController.get_roles);
-router.get("/roles/:roleid",isAuth, csrf, adminController.get_role_edit);
-router.post("/roles/remove",isAuth, adminController.roles_remove);
-router.post("/roles/:roleid",isAuth, adminController.post_role_edit);
+router.get("/roles",isAdmin,adminController.get_roles);
+router.get("/roles/:roleid",isAdmin, csrf, adminController.get_role_edit);
+router.post("/roles/remove",isAdmin, adminController.roles_remove);
+router.post("/roles/:roleid",isAdmin, adminController.post_role_edit);
 
-router.get("/users",isAuth, adminController.get_user);
-router.get("/users/:userid",isAuth, csrf, adminController.get_user_edit);
-router.post("/users/:userid",isAuth, adminController.post_user_edit);
+router.get("/users",isAdmin, adminController.get_user);
+router.get("/users/:userid",isAdmin, csrf, adminController.get_user_edit);
+router.post("/users/:userid",isAdmin, adminController.post_user_edit);
 
 module.exports = router;

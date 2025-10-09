@@ -2,7 +2,7 @@ const Blog = require("../models/blog");
 const Category = require("../models/category"); 
 const Role = require("../models/role");
 const User = require("../models/user");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const sequelize = require("../data/db");
 const slugField = require("../helpers/slugfield");
 
@@ -11,9 +11,11 @@ const fs = require("fs");
 exports.get_blog_delete = async function(req, res){
     const blogid = req.params.blogid;
     const userid = req.session.userid;
+    const isAdmin = req.session.roles.includes("admin");
 
     try {
-        const blog = await Blog.findOne({ id:blogid, userId: userid });
+        const blog = await Blog.findOne({
+            where: isAdmin ? { id:blogid } : { id:blogid, userId: userid }});
 
         if(blog) {
             return res.render("admin/blog-delete", {
@@ -141,12 +143,11 @@ exports.get_blog_edit = async function(req, res) {
     const blogid = req.params.blogid;
     const userid = req.session.userid;
 
+    const isAdmin = req.session.roles.includes("admin"); 
+
     try {
         const blog = await Blog.findOne({
-            where: {
-                id: blogid,
-                userId: userid
-            },
+            where: isAdmin ? { id:blogid } : { id: blogid, userId: userid },
             include: {
                 model: Category,
                 attributes: ["id"]
@@ -162,7 +163,7 @@ exports.get_blog_edit = async function(req, res) {
             });
         }
 
-        res.redirect("admin/blogs");
+        res.redirect("/admin/blogs");
     }
     catch(err) {
         console.log(err);
