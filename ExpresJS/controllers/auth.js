@@ -25,11 +25,6 @@ exports.post_register = async function(req, res) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-        const user  = await User.findOne({ where: { email: email }});
-        if(user) {
-            req.session.message = { text: "Girdiğiniz email adresiyle daha önce kayıt olunmuş.", class: "warning"};
-            return res.redirect("login");
-        }
         const newUser = await User.create({ fullname: name, email: email, password: hashedPassword });
 
         emailService.sendMail({
@@ -43,7 +38,16 @@ exports.post_register = async function(req, res) {
         return res.redirect("login");
     }
     catch(err) {
-        console.log(err);
+        let msg = "";
+
+        for(let e of err.errors) {
+            msg += e.message + " ";
+        }
+
+        return res.render("auth/register", {
+            title: "register",
+            message: { text: msg, class: "danger"},
+        });
     }
 }
 

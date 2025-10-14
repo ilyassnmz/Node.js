@@ -4,11 +4,22 @@ const sequelize = require("../data/db");
 const User = sequelize.define("user", {
     fullname: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: { msg: "İsim alanı boş bırakılamaz." }
+        }
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: {
+            args: true,
+            msg: "Bu email adresi zaten kayıtlı."
+        },
+        validate: {
+            notEmpty: { msg: "Mail alanı boş bırakılamaz." }
+        },
+        isEmail: { msg: "Lütfen geçerli bir email adresi giriniz." }
     },
     password: {
         type: DataTypes.STRING,
