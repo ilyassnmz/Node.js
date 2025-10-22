@@ -21,11 +21,8 @@ exports.post_register = async function(req, res) {
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     try {
-        const newUser = await User.create({ fullname: name, email: email, password: hashedPassword });
+        const newUser = await User.create({ fullname: name, email: email, password: password });
 
         emailService.sendMail({
             from: config.email.from,

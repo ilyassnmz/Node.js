@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../data/db");
+const bcrypt = require("bcrypt");
+
 
 const User = sequelize.define("user", {
     fullname: {
@@ -28,7 +30,16 @@ const User = sequelize.define("user", {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: { 
+                msg: "Parola alanı boş bırakılamaz." 
+            },
+            len: {
+                args: [5, 30],
+                msg: "Parola en az 5 en fazla 30 karakter olmalıdır."
+            }
+        }
     },
     resetToken :{
         type: DataTypes.STRING,
@@ -39,5 +50,9 @@ const User = sequelize.define("user", {
         allowNull: true
     }
 }, { timestamps: true});
+
+User.afterValidate(async (user) => {
+    user.password = await bcrypt.hash(user.password, 10);
+})
 
 module.exports = User;
