@@ -227,13 +227,11 @@ exports.post_blog_edit = async function(req, res) {
 
     const anasayfa = req.body.anasayfa == "on" ? 1 : 0;
     const onay = req.body.onay == "on" ? 1 : 0;
+    const isAdmin = req.session.roles.includes("admin");
 
     try {
         const blog = await Blog.findOne({
-            where: {
-                id: blogid,
-                userId: userid
-            },
+            where: isAdmin ? { id:blogid } : { id: blogid, userId: userid },
             include: {
                 model: Category,
                 attributes: ["id"]

@@ -6,7 +6,12 @@ const User = sequelize.define("user", {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            notEmpty: { msg: "İsim alanı boş bırakılamaz." }
+            notEmpty: { msg: "İsim alanı boş bırakılamaz." },
+            isFullname(value) {
+                if(value.split(" ").length < 2) {
+                    throw new Error("Lütfen geçerli bir ad soyad giriniz.");
+                }
+            }
         }
     },
     email: {
@@ -19,7 +24,7 @@ const User = sequelize.define("user", {
         validate: {
             notEmpty: { msg: "Mail alanı boş bırakılamaz." }
         },
-        isEmail: { msg: "Lütfen geçerli bir email adresi giriniz." }
+        isEmail: { msg: "Lütfen geçerli bir email adresi giriniz. " }
     },
     password: {
         type: DataTypes.STRING,
