@@ -22,6 +22,7 @@ exports.post_register = async function(req, res) {
     const email = req.body.email;
     const password = req.body.password;
     try {
+        throw new Error("Hata oluştu");
         const newUser = await User.create({ fullname: name, email: email, password: password });
 
         emailService.sendMail({
@@ -36,15 +37,18 @@ exports.post_register = async function(req, res) {
     }
     catch(err) {
         let msg = "";
-
-        for(let e of err.errors) {
-            msg += e.message + " ";
+        if(err.name == "SequelizeValidationError" || err.name == "SequelizeUniqueConstraintError") {
+            for(let e of err.errors) {
+                msg += e.message + " ";
+            }
         }
-
+        else {
+            msg += "Bir hata oluştu, lütfen tekrar deneyiniz.";
+        }
         return res.render("auth/register", {
-            title: "register",
-            message: { text: msg, class: "danger"},
-        });
+                title: "register",
+                message: { text: msg, class: "danger"},
+            });
     }
 }
 
