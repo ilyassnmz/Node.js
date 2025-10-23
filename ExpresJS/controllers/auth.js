@@ -17,7 +17,7 @@ exports.get_register = async function(req, res) {
     }
 }
 
-exports.post_register = async function(req, res) {
+exports.post_register = async function(req, res, next) {
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
@@ -47,7 +47,7 @@ exports.post_register = async function(req, res) {
         });
         }
         else {
-           res.redirect("/500");
+           next(err);
         }
     }
 }
@@ -63,7 +63,7 @@ exports.get_login = async function(req, res) {
         });
     }
     catch(err) {
-        console.log(err);
+        next(err);
     }
 }
 
@@ -73,7 +73,7 @@ exports.get_logout = async function(req, res) {
         return res.redirect("/account/login");
     }
     catch(err) {
-        console.log(err);
+        next(err);
     }
 }
 
@@ -118,7 +118,7 @@ exports.post_login = async function(req, res) {
         });     
     }
     catch(err) {
-        console.log(err);
+        next(err);
     }
 }
 
@@ -132,7 +132,7 @@ exports.get_reset = async function(req, res) {
         });
     }
     catch(err) {
-        console.log(err);
+        next(err);
     }
 }
 
