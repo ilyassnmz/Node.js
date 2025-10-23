@@ -6,7 +6,7 @@ const crypto = require("crypto");
 const { Op } = require("sequelize");
 const { raw } = require("express");
 
-exports.get_register = async function(req, res) {
+exports.get_register = async function(req, res, next) {
     try {
         return res.render("auth/register", {
             title: "register"
@@ -22,7 +22,7 @@ exports.post_register = async function(req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
     try {
-        throw new Error("Hata oluştu");
+        // throw new Error("Hata oluştu");
         const newUser = await User.create({ fullname: name, email: email, password: password });
 
         emailService.sendMail({
@@ -52,7 +52,7 @@ exports.post_register = async function(req, res, next) {
     }
 }
 
-exports.get_login = async function(req, res) {
+exports.get_login = async function(req, res, next) {
     const message = req.session.message;
     delete req.session.message;
     try {
@@ -67,7 +67,7 @@ exports.get_login = async function(req, res) {
     }
 }
 
-exports.get_logout = async function(req, res) {
+exports.get_logout = async function(req, res, next) {
     try {
         await req.session.destroy();
         return res.redirect("/account/login");
@@ -77,7 +77,7 @@ exports.get_logout = async function(req, res) {
     }
 }
 
-exports.post_login = async function(req, res) {
+exports.post_login = async function(req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
 

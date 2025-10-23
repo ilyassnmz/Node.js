@@ -20,7 +20,7 @@ exports.blogs_details = async function(req, res) {
                 blog: blog
             });
         }
-        res.redirect("/");
+        res.redirect("/404");
     }
     catch(err) {
         console.log(err);
