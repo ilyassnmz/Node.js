@@ -41,14 +41,14 @@ exports.post_register = async function(req, res) {
             for(let e of err.errors) {
                 msg += e.message + " ";
             }
+            return res.render("auth/register", {
+            title: "register",
+            message: { text: msg, class: "danger"},
+        });
         }
         else {
-            msg += "Bir hata oluştu, lütfen tekrar deneyiniz.";
+           res.redirect("/500");
         }
-        return res.render("auth/register", {
-                title: "register",
-                message: { text: msg, class: "danger"},
-            });
     }
 }
 
