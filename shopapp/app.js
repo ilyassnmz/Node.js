@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+const Joi = require("joi");
+
 app.use(express.json());
 
 // http methods: get, post, put, delete
@@ -20,6 +22,18 @@ app.get("/api/products", (req, res) => {
 });
 
 app.post("/api/products", (req, res) => {
+    const schema = Joi.object({
+        name: Joi.string().min(3).max(30).required(),
+        price: Joi.number().min(0).required()
+    });
+
+    const result = schema.validate(req.body);
+
+    if(result.error) {
+        res.status(400).send(result.error);
+        return;
+    }
+
     const product = {
         id: products.length + 1,
         name: req.body.name,
