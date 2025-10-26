@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 // http methods: get, post, put, delete
 
 const products = [
@@ -17,6 +19,16 @@ app.get("/api/products", (req, res) => {
     res.send(products);
 });
 
+app.post("/api/products", (req, res) => {
+    const product = {
+        id: products.length + 1,
+        name: req.body.name,
+        price: req.body.price
+    };
+    products.push(product);
+    res.send(product);
+});
+
 app.get("/api/products/:id", (req, res) => {
     console.log(req.params);
     console.log(req.query);
@@ -28,6 +40,8 @@ app.get("/api/products/:id", (req, res) => {
     }
     res.send(product);
 });
+
+
 
 app.listen(3000, () => {
     console.log("listening on port 3000");
