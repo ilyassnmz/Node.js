@@ -12,6 +12,12 @@ app.use(cors({
     methods: ["GET"]
 }));
 
+// app.use((req, res, next) => {
+//     res.setHeader("Access-Control-Allow-Origin", "*");
+//     res.setHeader("Access-Control-Allow-Methods", "GET");
+//     next();
+// });
+
 app.use("/api/products" ,products);
 app.use("/", home);
 
