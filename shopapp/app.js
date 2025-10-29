@@ -1,4 +1,5 @@
 const express = require("express");
+const { func } = require("joi");
 const app = express();
 
 const Joi = require("joi");
@@ -22,16 +23,10 @@ app.get("/api/products", (req, res) => {
 });
 
 app.post("/api/products", (req, res) => {
-    const schema = Joi.object({
-        name: Joi.string().min(3).max(30).required(),
-        price: Joi.number().min(0).required()
-    });
+    const { error } =  validateProduct(req.body);
 
-    const result = schema.validate(req.body);
-
-    if(result.error) {
-        res.status(400).send(result.error);
-        return;
+    if(error) {
+        return res.status(400).send(result.error.details[0].message);
     }
 
     const product = {
@@ -43,18 +38,52 @@ app.post("/api/products", (req, res) => {
     res.send(product);
 });
 
-app.get("/api/products/:id", (req, res) => {
-    console.log(req.params);
-    console.log(req.query);
+app.put("/api/products/:id", (req, res) => {
+    const product = products.find(p => p.id == req.params.id);
+    if(!product) {
+        return res.status(404).send("aradığınız ürün bulunamadı.");
+    }
 
+    const { error } = validateProduct(req.body);
+
+    if(error) {
+        return res.status(400).send(result.error.details[0].message);
+    }
+
+    product.name = req.body.name;
+    product.price = req.body.price;
+
+    res.send(product);
+});
+
+app.delete("/api/products/:id", (req, res) => {
+    const product = products.find(p => p.id == req.params.id);
+    if(!product) {
+        return res.status(404).send("aradığınız ürün bulunamadı.");
+    }
+
+    const index = products.indexOf(product);
+    products.splice(index, 1);
+    res.send(product);
+});
+
+app.get("/api/products/:id", (req, res) => {
     const product = products.find(p => p.id == req.params.id);
 
     if(!product) {
-        res.status(404).send("aradığınız ürün bulunamadı.");
+        return res.status(404).send("aradığınız ürün bulunamadı.");
     }
     res.send(product);
 });
 
+function validateProduct(product) {
+    const schema = new Joi.object({
+        name: Joi.string().min(3).max(30).required(),
+        price: Joi.number().required()
+    });
+
+    return schema.validate(product);
+}
 
 
 app.listen(3000, () => {
